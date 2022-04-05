@@ -1,7 +1,7 @@
 import java.util.Scanner;
 
 public class ConsoleApp {
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args){
 
         System.out.println("Type 'yes' if you want to enter your own CSV file path and 'no' if you want to use the default csv file path: ");
         Scanner pathChoiceScanner = new Scanner(System.in); //User choice to enter path or not
@@ -9,7 +9,6 @@ public class ConsoleApp {
 
         Scanner pathScanner; //User enter path file
         String FilePath;
-        String line = "";
         if(PathChoice.equals("yes")){
             System.out.println("User input path will be use. Please enter the path: ");
             pathScanner = new Scanner(System.in);
@@ -18,19 +17,20 @@ public class ConsoleApp {
             FilePath = "src/default.csv";
         }
         CSVcheck csVcheck = new CSVcheck();
-        //csVcheck.convertCSVtoList(FilePath); //convert csv file into list
         StudentEnrollmentList enrollmentList = new StudentEnrollmentList();
 
         System.out.println("Welcome to the Student Enrollment Console Application!");
         boolean exit = false;
         while(!exit){
+            printFunction printFunction = new printFunction(); //for option 3,4,5
             System.out.println("""
                     Input '1' to Enroll a student for 1 semester
                     Input '2' to Update student enrollment
-                    Input '3' to Print all of your Enrolled course in 1 semester
+                    Input '3' to Show all of your Enrolled course in 1 semester
                     Input '4' to Show all students in course in 1 semester
                     Input '5' to Show all courses in 1 semester
-                    Input '6' to Quit""");
+                    Input '6' to Save all enrollment information to a CSV file
+                    Input '7' to Quit""");
 
             System.out.println("Please input your option: ");
             Scanner scanner1= new Scanner(System.in);
@@ -138,25 +138,41 @@ public class ConsoleApp {
                 }
             }
             else if("3".equals(option)){ //call printCoursesForStudent
-
+                Scanner option3S_ID = new Scanner(System.in);
                 System.out.println("Please enter the student ID: ");
+                String studentID = option3S_ID.nextLine();
+                Scanner option3Semester = new Scanner(System.in);
                 System.out.println("Please enter the semester: ");
+                String semester = option3Semester.nextLine();
 
+                printFunction.printCoursesForStudent(studentID,semester);
             }
             else if("4".equals(option)){ //call printStudentInCourse
+                Scanner option4C_ID = new Scanner(System.in);
                 System.out.println("Please enter the course ID: ");
+                String courseID = option4C_ID.nextLine();
+                Scanner option4Semester = new Scanner(System.in);
                 System.out.println("Please enter the semester: ");
-
+                String semester = option4Semester.nextLine();
+                
+                printFunction.printStudentsInCourse(courseID,semester); 
 
             }
             else if("5".equals(option)){ //call printAllCourses
                 System.out.println("Please enter the semester: ");
                 Scanner option5Scanner = new Scanner(System.in);
-                String option5 = option5Scanner.nextLine();
+                String option5Semester = option5Scanner.nextLine();
                 printFunction printAll_C = new printFunction();
-                printAll_C.printAllCourses(option5);
+                printAll_C.printAllCourses(option5Semester,FilePath);
+                
+                printFunction.printAllCourses(option5Semester,FilePath);
             }
             else if("6".equals(option)){
+                System.out.println("All of the enrollment so far will be save in a csv file");
+                saveToCSV saveEnrollment = new saveToCSV();
+                saveEnrollment.saveToCSV();
+            }
+            else if("7".equals(option)){
                 System.out.println("Thank you for using the application");
                 exit = true;
             }
