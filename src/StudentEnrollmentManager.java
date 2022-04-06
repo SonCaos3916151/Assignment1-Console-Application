@@ -2,9 +2,9 @@ import java.util.List;
 
 public interface StudentEnrollmentManager {
 
-    public void add(StudentEnrollment newEnrollment);
-    public void update(StudentEnrollment beforeUpdate, StudentEnrollment updateData);
-    public void delete(StudentEnrollment enrollment);
-    public void getOne(String studentID);
-    public List<StudentEnrollment> getAll();
+    void add(String studentID, String semester, String courseID,String FilePath);
+    void update(String studentID, String semester, String courseID,String courseIDToChange,String courseSemesterToChange, String FilePath);
+    void delete(String studentID,String semester,String courseID);
+    int getOne(String studentID);
+    List<StudentEnrollment> getAll();
 }
