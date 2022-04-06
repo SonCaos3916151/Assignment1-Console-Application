@@ -29,10 +29,9 @@ public class Student {
 
     @Override
     public String toString() {
-        return "Student{" +
-                "Student ID='" + s_id + '\'' +
-                ", Student Name='" + s_name + '\'' +
-                ", Student Birthdate='" + birthdate + '\'' +
-                '}';
+        return "Student ID = " + s_id + " | " +
+                " Student Name = " + s_name + " | " +
+                " Student Date Of Birth = " + birthdate;
+
     }
 }
