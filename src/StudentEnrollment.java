@@ -1,4 +1,3 @@
-import java.util.Objects;
 
 public class StudentEnrollment {
     private Student student; //from Student Class
@@ -36,22 +35,9 @@ public class StudentEnrollment {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        StudentEnrollment that = (StudentEnrollment) o;
-        return Objects.equals(student, that.student) && Objects.equals(course, that.course) && Objects.equals(semester, that.semester);
-    }
-
-    public int hashCode() {
-        return Objects.hash(student, course, semester);
-    }
-
-    @Override
     public String toString() {
-        return "student: " + student.getS_id() + " " + student.getS_name() +
-                " | course: " + course.getC_id() + " " + course.getC_name() +
+        return "student: " + student.getS_id() + " Student Name: " + student.getS_name() + "(" + student.getBirthdate()+ ")"+
+                " | course: " + course.getC_id() + " Course name: " + course.getC_name() + " Course total credits: " + course.getNoOfCredits()+
                 " | Semester: " + semester;
     }
-    //Check duplicate enrollment with
 }
