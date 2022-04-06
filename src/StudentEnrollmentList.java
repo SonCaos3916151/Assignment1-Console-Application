@@ -2,53 +2,68 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class StudentEnrollmentList implements StudentEnrollmentManager{
-    private List<StudentEnrollment> studentEnrollmentList = new ArrayList<>();
-
+    private static final List<StudentEnrollment> studentEnrollmentList = new ArrayList<>();
+    CSVcheck csVcheck = new CSVcheck();
 
     @Override
-    public void add(StudentEnrollment newEnrollment) {
+    public void add(String studentID, String semester, String courseID,String FilePath){
+        String[]relatedEnrollmentInfo = csVcheck.getRelatedInfo(studentID,semester,courseID,FilePath);
+        Student newStudent = new Student();
+        newStudent.setS_id(studentID);
+        newStudent.setS_name(relatedEnrollmentInfo[0]);
+        newStudent.setBirthdate(relatedEnrollmentInfo[1]);
+        Course newStudentCourse = new Course();
+        newStudentCourse.setC_id(courseID);
+        newStudentCourse.setC_name(relatedEnrollmentInfo[2]);
+        newStudentCourse.setNoOfCredits(relatedEnrollmentInfo[3]);
+        StudentEnrollment newEnrollment = new StudentEnrollment(newStudent,newStudentCourse,semester);
         studentEnrollmentList.add(newEnrollment);
-        System.out.println("New enrollment has been created\n" + newEnrollment.toString());
+        System.out.println("Enrollment has been created\n" + newEnrollment);
     }
-
-    //change update to update to csv file
     @Override
-    public void update(StudentEnrollment toUpdate, StudentEnrollment updateInfo) {
-        toUpdate.setStudent(updateInfo.getStudent());
-        toUpdate.setCourse(updateInfo.getCourse());
-        toUpdate.setSemester(updateInfo.getSemester());
-        System.out.println("Enrollment has been updated :\n" + toUpdate.toString());
+    public void update(String studentID, String semester, String courseID,String courseIDToChange,String courseSemesterToChange, String FilePath) {
+        delete(studentID,courseID,semester);
+        add(studentID,courseSemesterToChange,courseIDToChange,FilePath);
+        System.out.println("Your enrollment has been updated");
     }
 
     @Override
-    public void delete(StudentEnrollment enrollment) {
-        studentEnrollmentList.remove(enrollment);
+    public void delete(String studentID,String courseID,String semester) {
+        int index = 0;
+        for (StudentEnrollment student : studentEnrollmentList) {
+            if (student.getStudent().getS_id().equals(studentID)) { //if student ID equal
+                if (student.getCourse().getC_id().equals(courseID)) { //if student course ID equal
+                    if (student.getSemester().equals(semester)) { //if semester equal
+                        index = studentEnrollmentList.indexOf(student);
+                    }
+                }
+            }
+        }
+        studentEnrollmentList.remove(index);
         System.out.println("Enrollment Info has been deleted\n");
     }
 
-    @Override
-    public void getOne(String studentID) { //get one student, if he have multiple enrollment, get all of that enrollment
-
+    public int getOne(String studentID) { //get one student, if multiple enrollment, get all of that enrollment
+        int count = 0;
+        for(StudentEnrollment student : studentEnrollmentList) {
+            if (student.getStudent().getS_id().equals(studentID)) { //if student ID equal
+                System.out.println(student); //print out student
+                count = count + 1;
+            }
+        }
+        return count;
     }
     @Override
     public List<StudentEnrollment> getAll() {
-        return this.studentEnrollmentList;
+        return studentEnrollmentList;
     }
 
     boolean checkDuplicateEnrollment(String studentID, String studentCourseID, String semester) {
-        if(studentCourseID.equals("not needed") && semester.equals("not needed") ) {
-            for (StudentEnrollment student : studentEnrollmentList) {
-                if (student.getStudent().getS_id().equals(studentID)) { //if student ID equal
-                    return true;
-                }
-            }
-        }else {
-            for (StudentEnrollment student : studentEnrollmentList) {
-                if (student.getStudent().getS_id().equals(studentID)) { //if student ID equal
-                    if (student.getCourse().getC_id().equals(studentCourseID)) { //if student course ID equal
-                        if (student.getSemester().equals(semester)) { //if semester equal
-                            return true;
-                        }
+        for (StudentEnrollment enrollment : studentEnrollmentList) {
+            if (enrollment.getStudent().getS_id().equals(studentID)) { //if student ID equal
+                if (enrollment.getCourse().getC_id().equals(studentCourseID)) { //if student course ID equal
+                    if (enrollment.getSemester().equals(semester)) { //if semester equal
+                        return true;
                     }
                 }
             }
